@@ -396,9 +396,9 @@ module FogDriver
 
     def remaining_wait_time(machine_spec, machine_options)
       if machine_spec.reference['started_at']
-        timeout = option_for(machine_options, :start_timeout) - (Time.now.to_i - parse_time(machine_spec.reference['started_at']))
+          timeout = option_for(machine_options, :start_timeout) - (Time.now.to_i - parse_time(machine_spec.reference['started_at']).to_i)
       else
-        timeout = option_for(machine_options, :create_timeout) - (Time.now.to_i - parse_time(machine_spec.reference['allocated_at']))
+          timeout = option_for(machine_options, :create_timeout) - (Time.now.to_i - parse_time(machine_spec.reference['allocated_at']).to_i)
       end
       timeout > 0 ? timeout : 0.01
     end
