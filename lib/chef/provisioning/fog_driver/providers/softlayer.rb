@@ -83,7 +83,7 @@ class Chef
 
             action_handler.report_progress "waiting for post-install script on #{server.name} to finish"
 
-            ::Retryable.retryable(:tries => 60, :sleep => 2) do
+            ::Retryable.retryable(:tries => 600, :sleep => 2) do
                 action_handler.report_progress "checking post-install status on #{server.name}"
                 res = server.service.request(:virtual_guest, server.id, :query => 'objectMask=userData')
                 userData = res.body['userData']
