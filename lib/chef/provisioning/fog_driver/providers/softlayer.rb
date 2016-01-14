@@ -45,6 +45,9 @@ class Chef
               opts.delete :tags
             end
 
+            label = opts[:key_name]
+            opts[:key_pairs] = [Fog::Compute[:SoftLayer].key_pairs.by_label(label)] if label.is_a? String
+
             # we hook in our own post-install script which uses userMetadata to
             # tell us when post-install is complete. If the user supplies their
             # own script it will be called by our hook before indicating
@@ -72,9 +75,7 @@ class Chef
             existing_user_data ||= ''
             if existing_user_data.empty?
               creds = Fog.credentials
-              ::Retryable.retryable(:tries => 60, :sleep => 2) do
-                sleep(2)
-
+              ::Retryable.retryable(:tries => 60, :sleep => 5) do
                 update_url = URI::HTTPS.build(
                   :userinfo => "#{creds[:softlayer_username]}:#{creds[:softlayer_api_key]}",
                   :host => 'api.service.softlayer.com',
